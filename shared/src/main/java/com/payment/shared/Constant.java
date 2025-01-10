@@ -15,4 +15,5 @@ public class Constant {
     public static final String PAYMENT_FAILED = "Payment Failed";
     public static final String AMOUNT_MUST_BE_GREATER_THAN_ZERO = "Amount Must Be Greater Than Zero. ";
     public static final String BILL_PAYMENT = "Bill Payment";
+    public static final String BAD_REQUEST = "400 BAD_REQUEST";
 }

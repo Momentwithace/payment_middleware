@@ -8,5 +8,5 @@ public interface AccountTransactionService {
     ResponseDto<?> creditAccount(AccountUpdateRequest request);
     ResponseDto<?> debitAccount(AccountUpdateRequest request);
 
-    ResponseDto<?> internaltransfer(AccountInternalTransferRequest accountInternalTransferRequest);
+    ResponseDto<?> internalTransfer(AccountInternalTransferRequest accountInternalTransferRequest);
 }

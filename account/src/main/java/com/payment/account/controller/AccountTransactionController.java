@@ -29,7 +29,7 @@ public class AccountTransactionController {
 
     @PostMapping("/transfer")
     public ResponseEntity<?> transfer(@RequestBody AccountInternalTransferRequest request) {
-        return ResponseEntity.ok(accountTransactionService.internaltransfer(request));
+        return ResponseEntity.ok(accountTransactionService.internalTransfer(request));
     }
 
 }

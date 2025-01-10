@@ -17,4 +17,5 @@ public class AccountResponse {
     private AccountType accountType;
     private BigDecimal balance = BigDecimal.ZERO;
     private Long userId;
+
 }
