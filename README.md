@@ -93,7 +93,7 @@ Each micro-service is independent and responsible for a specific domain function
 
 ### Steps:
 1. Clone the repository:
-   -Project Link: https://github.com/Momentwithace/payment_middleware.git
+   - Project Link: https://github.com/Momentwithace/payment_middleware.git
    
 
 2. Build the project:
