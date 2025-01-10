@@ -81,16 +81,11 @@ public class PaymentServiceImpl implements PaymentService {
                     .amount(transferRequest.getAmount())
                     .transactionId(transactionId)
                     .transactionType(TransactionType.TRANSFER)
-                    .status("FAILED")
-                    .createdAt(LocalDateTime.now())
+                     .createdAt(LocalDateTime.now())
                     .build();
             if (response.getStatusCode().is2xxSuccessful()) {
-
-
                 transaction.setStatus("SUCCESSFUL");
                 transaction = transactionRepository.save(transaction);
-
-
                 log.info("Transfer successful, Transaction ID: {}", transaction.getTransactionId());
                 return new ResponseDto<>("SUCCESSFUL", "00", "Transfer Successful", HttpStatus.OK);
             } else {
