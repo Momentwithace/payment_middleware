@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static com.payment.shared.Constant.SUCCESS_CODE;
+import static com.payment.shared.Constant.*;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +53,7 @@ public class PaymentServiceImpl implements PaymentService {
             log.info("Initiating transfer: {}", transferRequest);
 
             if (transferRequest.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-                throw new IllegalArgumentException("Transfer amount must be greater than zero");
+                throw new IllegalArgumentException(AMOUNT_MUST_BE_GREATER_THAN_ZERO);
             }
 
             AccountUpdateRequest accountUpdateRequest = new AccountUpdateRequest();
@@ -86,16 +86,16 @@ public class PaymentServiceImpl implements PaymentService {
                      .createdAt(LocalDateTime.now())
                     .build();
             if (response.getStatusCode().is2xxSuccessful()) {
-                transaction.setStatus("SUCCESSFUL");
+                transaction.setStatus(SUCCESSFUL);
                 transaction = transactionRepository.save(transaction);
                 log.info("Transfer successful, Transaction ID: {}", transaction.getTransactionId());
-                return new ResponseDto<>("SUCCESSFUL", SUCCESS_CODE, "Transfer Successful", HttpStatus.OK);
+                return new ResponseDto<>(SUCCESS_CODE, SUCCESS_CODE, TRANSFER_SUCCESS, HttpStatus.OK);
             } else {
-                transaction.setStatus("FAILED");
+                transaction.setStatus(FAILED);
             }
 
 
-            return new ResponseDto<>("Failed", "10", "Transfer failed", HttpStatus.BAD_REQUEST);
+            return new ResponseDto<>(FAILED_CODE, FAILED, TRANSFER_FAILED, HttpStatus.BAD_REQUEST);
         } catch (WebClientResponseException.BadRequest e) {
 
             return e.getResponseBodyAs(ResponseDto.class);
@@ -103,21 +103,21 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     public ResponseDto<?> getBanks() {
-        return new ResponseDto<>("Success", "0", mock.getBanks(), HttpStatus.OK);
+        return new ResponseDto<>(SUCCESS_CODE, SUCCESS, mock.getBanks(), HttpStatus.OK);
     }
 
     public ResponseDto<?> accountNameLookUp(NameLookUpRequest nameLookUpRequest) {
         for (OtherAccounts b : mock.getMockOtherAccounts()) {
             if (b.getAccountNumber().equals(nameLookUpRequest.getAccountNumber()) && b.getBankCode().equals(nameLookUpRequest.getBankCode())) {
-                return new ResponseDto<>("Success", "0", b.getName(), HttpStatus.OK);
+                return new ResponseDto<>(SUCCESS_CODE, SUCCESS, b.getName(), HttpStatus.OK);
             }
         }
-        return new ResponseDto<>("Failed", "10", "Account not found", HttpStatus.BAD_REQUEST);
+        return new ResponseDto<>(FAILED_CODE, FAILED, ACCOUNT_NOT_FOUND, HttpStatus.BAD_REQUEST);
     }
 
 
     public ResponseDto<?> getBillers() {
-        return new ResponseDto<>("Success", "0", mock.getBiller(), HttpStatus.OK);
+        return new ResponseDto<>(SUCCESS_CODE, SUCCESS, mock.getBiller(), HttpStatus.OK);
     }
 
 
@@ -127,13 +127,13 @@ public class PaymentServiceImpl implements PaymentService {
         for (String productName : productNames) {
             products.add(new Products(productName));
         }
-        return new ResponseDto<>("Success", "0", products, HttpStatus.OK);
+        return new ResponseDto<>(SUCCESS_CODE, SUCCESS, products, HttpStatus.OK);
     }
 
     @Override
     public ResponseDto<?> processBillPayment(BillsPaymentRequest request) {
         if (request.getAmount().doubleValue() <= 0) {
-            throw new IllegalArgumentException("Amount must be greater than zero.");
+            throw new IllegalArgumentException(AMOUNT_MUST_BE_GREATER_THAN_ZERO);
         }
 
         String transactionId = generateTransactionId();
@@ -146,24 +146,24 @@ public class PaymentServiceImpl implements PaymentService {
         Transaction transaction;
         transaction = Transaction.builder()
                 .sourceAccountNumber(request.getCustomerAccountNumber())
-                .narration("Bills payment")
+                .narration(BILL_PAYMENT)
                 .amount(request.getAmount())
                 .transactionId(transactionId)
                 .transactionType(TransactionType.BILL)
                 .createdAt(LocalDateTime.now())
                 .build();
         if (response.getStatusCode().is2xxSuccessful()) {
-            transaction.setStatus("SUCCESSFUL");
+            transaction.setStatus(SUCCESSFUL);
             transaction = transactionRepository.save(transaction);
             log.info("Transfer successful, Transaction ID: {}", transaction.getTransactionId());
-            return new ResponseDto<>("Success", "0", transactionId, HttpStatus.OK);
+            return new ResponseDto<>(SUCCESS_CODE, SUCCESS, transactionId, HttpStatus.OK);
 
         } else {
-            transaction.setStatus("FAILED");
+            transaction.setStatus(FAILED);
             transactionRepository.save(transaction);
 
         }
-        return new ResponseDto<>("Failed", "10", "Payment failed", HttpStatus.BAD_REQUEST);
+        return new ResponseDto<>(FAILED_CODE, FAILED, PAYMENT_FAILED, HttpStatus.BAD_REQUEST);
 
 
     }
