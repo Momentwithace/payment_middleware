@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.payment.shared.Constant.*;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -30,14 +32,14 @@ public class AccountTransactionServiceImpl implements AccountTransactionService 
 
 
         if (optionalAccount.isEmpty()) {
-            return new ResponseDto<>("Failed", "10", "Account not found", HttpStatus.BAD_REQUEST);
+            return new ResponseDto<>(FAILED_CODE, FAILED, ACCOUNT_NOT_FOUND, HttpStatus.BAD_REQUEST);
         }
         Account account = optionalAccount.get();
         account.setBalance(account.getBalance().add(request.getAmount()));
         accountRepository.save(account);
 
         log.info("Account {} credited successfully. New balance: {}", account.getId(), account.getBalance());
-        return new ResponseDto<>("Success", "0", "successful", HttpStatus.OK);
+        return new ResponseDto<>(SUCCESS_CODE, SUCCESS, SUCCESSFUL, HttpStatus.OK);
 
     }
 
@@ -48,15 +50,15 @@ public class AccountTransactionServiceImpl implements AccountTransactionService 
         Optional<Account> account = accountRepository.findByAccountNumber(request.getAccountNumber());
 
         if (account.isEmpty()) {
-            return new ResponseDto<>("Failed", "10", "Account not found", HttpStatus.BAD_REQUEST);
+            return new ResponseDto<>(FAILED_CODE, FAILED, ACCOUNT_NOT_FOUND, HttpStatus.BAD_REQUEST);
         }
 
         if (account.get().getBalance().doubleValue() < request.getAmount().doubleValue()) {
-            return new ResponseDto<>("Failed", "10", "Insufficient balance", HttpStatus.BAD_REQUEST);
+            return new ResponseDto<>(FAILED_CODE, FAILED, INSUFFICIENT_BALANCE, HttpStatus.BAD_REQUEST);
         }
 
         if (!pinEncoder.verify(request.getPin(), account.get().getPin())) {
-            return new ResponseDto<>("Failed", "10", "Wrong credentials", HttpStatus.BAD_REQUEST);
+            return new ResponseDto<>(FAILED_CODE, FAILED, WRONG_CREDENTIALS, HttpStatus.BAD_REQUEST);
         }
 
         account.get().setBalance(account.get().getBalance().subtract(request.getAmount()));
@@ -64,7 +66,7 @@ public class AccountTransactionServiceImpl implements AccountTransactionService 
 
         log.info("Account {} debited successfully. New balance: {}", account.get().getAccountNumber(), account.get().getBalance());
 
-        return new ResponseDto<>("Success", "0", "successful", HttpStatus.OK);
+        return new ResponseDto<>(SUCCESS_CODE, SUCCESS, SUCCESSFUL, HttpStatus.OK);
 
     }
 
@@ -73,6 +75,6 @@ public class AccountTransactionServiceImpl implements AccountTransactionService 
     public ResponseDto<?> internaltransfer(AccountInternalTransferRequest accountInternalTransferRequest) {
         debitAccount(accountInternalTransferRequest.getFromAccountUpdateRequest());
         creditAccount(accountInternalTransferRequest.getToAccountUpdateRequest());
-        return new ResponseDto<>("Success", "0", "successful", HttpStatus.OK);
+        return new ResponseDto<>(SUCCESS_CODE, SUCCESS, SUCCESSFUL, HttpStatus.OK);
     }
 }

@@ -1,6 +1,8 @@
 package com.payment.auth;
 
 
+import com.payment.auth.model.User;
+import com.payment.auth.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;

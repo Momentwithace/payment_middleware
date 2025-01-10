@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.payment.account.utils.AccountUtil.generateAccountNumber;
+import static com.payment.shared.Constant.*;
 
 @Slf4j
 @Service
@@ -41,7 +42,7 @@ public class AccountServiceImpl implements AccountService {
                 .accounts(accountResponses)
                 .user(userDetailsResponse)
                 .build();
-        return new ResponseDto<>("Success", "0", dashboardResponse, HttpStatus.OK);
+        return new ResponseDto<>(SUCCESS_CODE, SUCCESS, dashboardResponse, HttpStatus.OK);
 
     }
 
@@ -64,7 +65,7 @@ public class AccountServiceImpl implements AccountService {
                 .accountType(account.getAccountType())
                 .build();
 
-        return new ResponseDto<>("Success", "0", accountResponse, HttpStatus.OK);
+        return new ResponseDto<>(SUCCESS_CODE, SUCCESS, accountResponse, HttpStatus.OK);
 
     }
 
@@ -73,12 +74,12 @@ public class AccountServiceImpl implements AccountService {
 
         Optional<Account> account = accountRepository.findByAccountNumber(accountNumber);
         if (account.isEmpty()) {
-            return new ResponseDto<>("Failed", "10", "Account not found", HttpStatus.BAD_REQUEST);
+        return new ResponseDto<>(FAILED_CODE, FAILED, ACCOUNT_NOT_FOUND, HttpStatus.BAD_REQUEST);
 
         }
         AccountResponse accountResponse = modelMapper.map(account.get(), AccountResponse.class);
 
-        return new ResponseDto<>("Success", "0", accountResponse, HttpStatus.OK);
+        return new ResponseDto<>(SUCCESS_CODE, SUCCESS, accountResponse, HttpStatus.OK);
 
     }
 }

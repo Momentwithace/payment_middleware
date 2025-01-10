@@ -1,4 +1,4 @@
-package com.payment.auth;
+package com.payment.auth.model;
 
 import jakarta.persistence.*;
 import lombok.*;

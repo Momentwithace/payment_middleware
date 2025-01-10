@@ -22,6 +22,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static com.payment.shared.Constant.SUCCESS_CODE;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -87,7 +89,7 @@ public class PaymentServiceImpl implements PaymentService {
                 transaction.setStatus("SUCCESSFUL");
                 transaction = transactionRepository.save(transaction);
                 log.info("Transfer successful, Transaction ID: {}", transaction.getTransactionId());
-                return new ResponseDto<>("SUCCESSFUL", "00", "Transfer Successful", HttpStatus.OK);
+                return new ResponseDto<>("SUCCESSFUL", SUCCESS_CODE, "Transfer Successful", HttpStatus.OK);
             } else {
                 transaction.setStatus("FAILED");
             }

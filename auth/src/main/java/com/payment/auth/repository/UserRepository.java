@@ -1,6 +1,7 @@
-package com.payment.auth;
+package com.payment.auth.repository;
 
 
+import com.payment.auth.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

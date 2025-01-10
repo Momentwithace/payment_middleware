@@ -9,9 +9,9 @@ import com.payment.auth.dtos.response.UserDetailsResponse;
 import com.payment.auth.message.ErrorMessage;
 import com.payment.auth.utils.Constants;
 import com.payment.shared.dtos.ResponseDto;
-import com.payment.auth.UserRepository;
+import com.payment.auth.repository.UserRepository;
 import com.payment.shared.client.AccountClient;
-import com.payment.auth.User;
+import com.payment.auth.model.User;
 import com.payment.auth.exception.GlobalException;
 import com.payment.auth.exception.ServiceUnavailableException;
 

@@ -1,6 +1,7 @@
 package com.payment.auth;
 
 
+import com.payment.auth.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
